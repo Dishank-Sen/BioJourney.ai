@@ -1,9 +1,7 @@
-// src/fileUpload.js
 import express from "express";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
-import path from "path";
 import { extractFromCSV } from "./utils/extractor.js";
 import { generateInsights } from "./utils/insightGenerator.js";
 
@@ -18,47 +16,36 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// POST /upload (CSV only)
+// POST /upload
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-    const ext = path.extname(req.file.originalname).toLowerCase();
-    if (ext !== ".csv") {
+    const ext = req.file.originalname.split(".").pop().toLowerCase();
+    if (ext !== "csv") {
       return res.status(400).json({ error: "Only CSV files are supported" });
     }
 
-    let extracted = [];
-    try {
-      extracted = await extractFromCSV(req.file.buffer);
-    } catch (exErr) {
-      console.error("CSV extraction error:", exErr);
-      return res.status(500).json({ error: "Failed to process CSV file" });
-    }
+    // Extract data from CSV
+    const extracted = await extractFromCSV(req.file.buffer);
 
-    // ✅ Generate insights from CSV
+    // Generate insights
     const insights = generateInsights({
-      type: "csv",
       data: extracted,
       fileName: req.file.originalname,
     });
 
-    // Upload file to Cloudinary
+    // Upload raw file to Cloudinary
     const stream = cloudinary.uploader.upload_stream(
       { resource_type: "auto", folder: "biojourney_docs" },
       (error, result) => {
-        if (error) {
-          console.error("Cloudinary upload error:", error);
-          return res.status(500).json({ error: "Cloudinary upload failed" });
-        }
+        if (error) return res.status(500).json({ error: "Cloudinary upload failed" });
         res.json({
           status: "success",
           url: result.secure_url,
           public_id: result.public_id,
           extracted,
-          insights, // ✅ return insights
+          insights,
         });
       }
     );

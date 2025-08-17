@@ -12,7 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/upload", fileUploadRoutes);
+
+app.use("/upload", fileUploadRoutes);   // ✅ only CSV now
 app.use("/files", getImagesRoutes);
 app.use("/delete", deleteImagesRoutes);
 
