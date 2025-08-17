@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "biojourney",
+  "private_key_id": "641f556c7166712d4193b9dcc3405a73ed01ba6b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC56AvAGzNUwQbt\ng95MN0qcvxWyKs/cOILAGhzkmIQbvgn/CKfeaWzrtizLwlG5UirKccxiA/gbm28R\nM/RpCWWO5Lcp4i3eSEz2p7QMReZAymeprJBDnP/YRWKxdYFAcH6dbpM7wGmo5rtn\nEPRKBdZleTQ1e+bU9HTKzaYyp7WzjTT2OZ41i9HjQwLMSQG2NWIcwJYfcBxR7FrV\nlI6ltcbRB2ZNJK1SNWanA7nRAG2w59gOsiHcrn0mc2UrJ9Jtw3TnbipXQwpnxFGx\nT9JY18cuMs/3dpkWoBqfa1oiIQHnGm0VPF50Eg8497Uf3pjyocSU8J7jUT8Haily\nPlm1EFb5AgMBAAECggEAKMaPMTsmFpxh7x2h1/i2qku1MAd44PYaI5V2qeMT8tvL\naH9XBo78H3UtPSHpd+rgTNgJ+qOhOzjr8wuAu7seZemfjRW5dsxH6T/eW2THfIWI\nmCwr1lCswxxw6bh6uY4TD2fN7milJDE7gH80/blrDYW4oFSFTEc0CLlzjx++2Fss\nP57notShOZv49qjvVQusQAvWZ6Nz3xKHGUHes2PZA/gZBQcY/OYWqwg2TpaWEJNx\nbkq+OsouVZNqWL4Xpji10IrSpSpERjuZYEJcVnSgIdTxNKKAbTeRuRjiJlGWVcq6\nRZmidNSUN0Tk7qpcW+HwsxL283WiSHVMCY/3VdyUMwKBgQDeWarDZWvWYFvZfhI0\nOWpu4KRUWpryu/OlE6GzcjrTZjr+zZDiZD7uSyQ89P3xKp+RBc4XR82yw+61P6d1\nyWqjeQt4bwdam038PlpQFFxVEZhpP1NfH0TVWEVmqGWoFLppKZwM96BP9TD/WQF2\n9/LWRuy+ZAK103n/JHYEfKw+xwKBgQDWCncp7TrB/e0bvcqOzI08T7nMihvmn1K9\n75gwlU5Uz4jqhO1LCnlgV0M0d9WPSKTnUsK/Flgw33SCQQgfzL2wfQW31DeQn5ya\npAmK6IZDap2SFWa7RplhtSC18xtkzanTK6S76AMPuJXmabmKVmVeN93ISXDlCzvI\nn0u0gxf8PwKBgGL3YixKTi9DAF7T4GJiU986Gap6EZGM2qtVC5oFc+14CTY0ZRJ/\nMAt8YorHOOhI4nD4NnziNsokr3D4/h5NIivUyqg2Mv2/NnzZe/U8usQaas4do4wp\nLMgQ3AMPXP/tCfOY055p8W7lYYOmKCK9xdZeBy3O8e3gTOKlZeolW70tAoGAD/vM\nFkdu4dmygSXVIIDJ8z0I5OtTVg+DwEdKGCauKMsusESo67emhLk/fYWNXxvPpK6b\neGWUxGGLc8ajcqx5ZdqQOMASPiyNJ0ckp0jh7driVWxftZB6F7/M54l1/DsXeXuC\n271hrSTdnM08W8ZD35tQZoqFcbU7C6pJnvtDKUUCgYBwChJuhZ1+OIEppKowObba\nI+WkiXINJYpLPWB6CzIIvSOdWzC5C+75pcoJMo5frXe2tyLQJ4tHjIzObFnMoWrF\n0WLbiYYbD9kB8R3Xi2f9jbCcgSIF6g0HLWPesDSsjOEtw1OGj0IGcfzFkwMkgwua\nykZ2jOfgRgILUNh7HPZNHA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "biojourney@biojourney.iam.gserviceaccount.com",
+  "client_id": "113983120976599299427",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/biojourney%40biojourney.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

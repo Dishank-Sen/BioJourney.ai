@@ -1,12 +1,66 @@
-import React, { useState } from "react";
-import { DocumentTextIcon, ArrowUpTrayIcon } from "@heroicons/react/24/solid";
+import React, { useState, useEffect } from "react";
+import {
+  DocumentTextIcon,
+  ArrowUpTrayIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
 export default function C4() {
   const [documents, setDocuments] = useState([]);
 
-  const handleUpload = (e) => {
+  // Fetch documents from backend (Cloudinary list)
+  const fetchDocuments = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/files");
+      const data = await res.json();
+      setDocuments(data);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+    }
+  };
+
+  // Run once when component mounts
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  // Upload files
+  const handleUpload = async (e) => {
     const files = Array.from(e.target.files);
-    setDocuments([...documents, ...files]);
+
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const res = await fetch("http://localhost:8000/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (data.status === "success") {
+          // Refresh document list
+          fetchDocuments();
+        }
+      } catch (err) {
+        console.error("Upload failed:", err);
+      }
+    }
+  };
+
+  // Delete a file
+  const handleDelete = async (publicId) => {
+    try {
+      await fetch(`http://localhost:8000/delete/${publicId}`, {
+        method: "DELETE",
+      });
+      setDocuments((prev) =>
+        prev.filter((doc) => doc.public_id !== publicId)
+      );
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
   };
 
   return (
@@ -34,7 +88,25 @@ export default function C4() {
               className="flex items-center gap-3 p-3 border rounded-lg shadow-sm bg-white"
             >
               <DocumentTextIcon className="w-6 h-6 text-blue-500" />
-              <span className="text-gray-700">{doc.name}</span>
+              <span className="text-gray-700 truncate max-w-xs">
+                {doc.url.split("/").pop()}
+              </span>
+
+              <a
+                href={doc.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline ml-auto"
+              >
+                View
+              </a>
+
+              <button
+                onClick={() => handleDelete(doc.public_id)}
+                className="text-red-500 hover:text-red-700 ml-3"
+              >
+                <TrashIcon className="w-5 h-5" />
+              </button>
             </li>
           ))}
         </ul>
