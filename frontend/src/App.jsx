@@ -14,6 +14,7 @@ import C3 from "./components/C3.jsx";
 import C4 from "./components/C4.jsx";
 import C5 from "./components/C5.jsx";
 import C6 from "./components/C6.jsx";
+import Test from "./components/Test.jsx";
 
 export default function App() {
   return (
@@ -119,6 +120,7 @@ export default function App() {
           <Route path="/documents" element={<C4 />} />
           <Route path="/user-profile" element={<C5 />} />
           <Route path="/progress" element={<C6 />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </div>
     </div>

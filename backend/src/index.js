@@ -41,6 +41,10 @@ app.get("/ping", (req, res) => {
   res.json({ message: "pong 🏓 from backend" });
 });
 
+app.get("/test", (req, res) => {
+  res.json({ message: "test message" });
+});
+
 app.post("/api/getContent", async (req, res) => {
   const { msg, userId } = req.body;
   const geminiRes = await generateContent(msg, userId);
