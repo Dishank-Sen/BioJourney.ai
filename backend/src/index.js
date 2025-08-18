@@ -41,6 +41,10 @@ app.get("/ping", (req, res) => {
   res.json({ message: "pong 🏓 from backend" });
 });
 
+app.get("/test1", (req, res) => {
+  res.json({ message: "test message 1" });
+});
+
 app.get("/test", (req, res) => {
   res.json({ message: "test message" });
 });
