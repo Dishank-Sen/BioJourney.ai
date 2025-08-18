@@ -15,7 +15,7 @@ now to answer what does it do , here is the explanation
 So what we have built is a web-app, and in this project we have shown the user side of it(how the user will interact with this), I will discuss how the elyx team will get benifitted from it later on.
 
 ##Chat-Section
-<img width="1917" height="922" alt="home-page" src="https://github.com/user-attachments/assets/6d9ff6f5-fdf7-4e6a-bbbd-e8a7dba00705" />
+<img width="1917" height="906" alt="home-page2" src="https://github.com/user-attachments/assets/7ecd7eb5-6581-46f1-95a1-3406a00d573d" />
 so this is our chat section of our web-app which will also act as home page, in this section user can put up any of his/her query , then a AI response will come up which would have all the context of the
 conversation that has happened till now and also about the info in the documents(medical reports,food logs).The response would be given by the respective AI persona to which the question was related to
 (for ex- if the question is related to some medication then Dr warren answers the query).
@@ -25,8 +25,8 @@ Apart from this the elyx team can also put up messages(for ex-your monthly medic
 
 ##Timeline-section
 #Timeline
-<img width="1915" height="912" alt="Timeline" src="https://github.com/user-attachments/assets/f9d0b9be-ffdc-4daa-87e2-4e4dbd7a8c9e" />
-In this section we will show all the important events and decision that happened in member's medical journey with its reason(for ex-showing that some X medicine was added to the current plan because of some
+In this section <img width="1906" height="896" alt="timeline2" src="https://github.com/user-attachments/assets/5e4dd7f3-0dad-472e-952b-716d7dd29e4b" />
+we will show all the important events and decision that happened in member's medical journey with its reason(for ex-showing that some X medicine was added to the current plan because of some
 Y reason on some Z date).
 
 ##Wearables
