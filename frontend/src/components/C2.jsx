@@ -72,7 +72,7 @@ export default function C2() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("http://localhost:3000/api/timeline", {
+        const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/timeline`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId }),
@@ -151,7 +151,7 @@ export default function C2() {
     };
 
     const getConversationCount = async (userId) => {
-      const res = await fetch("http://localhost:3000/api/getConversationCount", {
+      const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json"

@@ -10,7 +10,7 @@ export default function GeminiChat() {
     setUserInput("");
 
     try {
-      const res = await fetch("http://localhost:3000/api/getContent", {
+      const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/getContent`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

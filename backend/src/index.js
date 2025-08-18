@@ -37,6 +37,9 @@ cron.schedule("0 0 * * *", async () => {
   await startShifting("tier3-to-tier4");
 });
 
+app.get("/ping", (req, res) => {
+  res.json({ message: "pong 🏓 from backend" });
+});
 
 app.post("/api/getContent", async (req, res) => {
   const { msg, userId } = req.body;
