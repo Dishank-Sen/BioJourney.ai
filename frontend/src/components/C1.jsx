@@ -1,9 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 
+// Helper Function to Group Dates
+const formatDateGroup = (dateString) => {
+  const date = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  if (date.toDateString() === today.toDateString()) {
+    return "Today";
+  }
+  if (date.toDateString() === yesterday.toDateString()) {
+    return "Yesterday";
+  }
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+};
+
 export default function C1() {
-  const [conversations, setConversations] = useState([]); // store conversation docs
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [groupedConversations, setGroupedConversations] = useState({});
+  const [selectedDateGroup, setSelectedDateGroup] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,8 +45,21 @@ export default function C1() {
           const data = await res.json();
           console.log("API Data:", data);
 
-          // ✅ Fix: conversations live inside data.conversation.conversation
-          setConversations([data.conversation]);
+          if (data.conversation && data.conversation.conversation) {
+            const messagesByDate = data.conversation.conversation.reduce(
+              (acc, msg) => {
+                const dateKey = formatDateGroup(msg.createdAt);
+                if (!acc[dateKey]) {
+                  acc[dateKey] = [];
+                }
+                // ✅ FIX: Use push instead of unshift to maintain chronological order
+                acc[dateKey].push(msg);
+                return acc;
+              },
+              {}
+            );
+            setGroupedConversations(messagesByDate);
+          }
         }
       } catch (err) {
         console.error("Error fetching conversations:", err);
@@ -44,12 +77,11 @@ export default function C1() {
     }
   }, [messages]);
 
-  const handleSelectConversation = (convDoc) => {
-    setSelectedConversation(convDoc);
+  const handleSelectConversation = (dateKey, messagesForDate) => {
+    setSelectedDateGroup(dateKey);
 
-    // ✅ Extract messages properly from conversation.conversation[]
     setMessages(
-      convDoc.conversation
+      messagesForDate
         .map((msg) => [
           msg.userReply && { role: "user", text: msg.userReply },
           msg.assistantReply && {
@@ -59,7 +91,7 @@ export default function C1() {
           },
         ])
         .flat()
-        .filter(Boolean) // remove nulls
+        .filter(Boolean)
     );
   };
 
@@ -83,7 +115,11 @@ export default function C1() {
       if (res.ok) {
         const data = await res.json();
         setPersona(data.persona);
-        const aiMsg = { role: "ai", text: data.response, persona: data.persona };
+        const aiMsg = {
+          role: "ai",
+          text: data.response,
+          persona: data.persona,
+        };
         setMessages((prev) => [...prev, aiMsg]);
       } else {
         setMessages((prev) => [
@@ -101,6 +137,12 @@ export default function C1() {
       setLoading(false);
     }
   };
+  
+  const sortedConversationKeys = Object.keys(groupedConversations).sort((a, b) => {
+      const dateA = a === "Today" ? new Date() : a === "Yesterday" ? new Date(Date.now() - 86400000) : new Date(a);
+      const dateB = b === "Today" ? new Date() : b === "Yesterday" ? new Date(Date.now() - 86400000) : new Date(b);
+      return dateB - dateA;
+  });
 
   return (
     <div className="flex w-full" style={{ height: "calc(100vh - 64px)" }}>
@@ -123,22 +165,24 @@ export default function C1() {
         <div className="flex-1 overflow-y-auto">
           {initialLoading ? (
             <p className="p-3 text-gray-500">Loading conversations...</p>
-          ) : conversations.length === 0 ? (
+          ) : sortedConversationKeys.length === 0 ? (
             <p className="p-3 text-gray-500">No conversations yet</p>
           ) : (
             <ul>
-              {conversations.map((conv, idx) => (
+              {sortedConversationKeys.map((dateKey) => (
                 <li
-                  key={conv._id || idx}
+                  key={dateKey}
                   className={`p-3 cursor-pointer hover:bg-gray-200 ${
-                    selectedConversation === conv ? "bg-gray-300" : ""
+                    selectedDateGroup === dateKey ? "bg-gray-300" : ""
                   }`}
-                  onClick={() => handleSelectConversation(conv)} // ✅ Pass doc, not array
+                  onClick={() =>
+                    handleSelectConversation(dateKey, groupedConversations[dateKey])
+                  }
                 >
                   {sidebarOpen ? (
-                    <span>Chat {idx + 1}</span>
+                    <span className="font-medium">{dateKey}</span>
                   ) : (
-                    <span className="truncate">#{idx + 1}</span>
+                    <span className="truncate">#</span>
                   )}
                 </li>
               ))}
@@ -149,7 +193,6 @@ export default function C1() {
 
       {/* Chat Area */}
       <div className="flex-1 flex flex-col">
-        {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((msg, idx) => (
             <div
