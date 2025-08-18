@@ -1,48 +1,72 @@
-We have hosted a demo of our website here you can go and see it 
-https://dsxdev.me/
+# BioJourney.ai 🩺✨
 
+Welcome to **BioJourney.ai**, a personalized health companion designed to track, manage, and provide intelligent insights into your medical journey. Our application offers a seamless interface for users to interact with their health data, receive AI-driven advice, and stay connected with their care team.
 
+## 🚀 Live Demo
 
-So here is a brief explanation of what our project do and how does it do that.
+You can explore a live version of the user-facing application here:
 
-###Back-end
-To answer the question how does it do that , we have explained it in this miro board dashboard , you can go through it by just giving any one email to it
-https://miro.com/welcomeonboard/QTNZL2F6L2dBTXZrVnVLZ1BZL1JxN1dNenBPOEdPa2YrUWhieElTVG1MbXNvNEVBaExZelpSQWcxSm5RN2JvOFA3eEpGQjF5SUZvY2k0SFB0eDRDTVdQNmpVcWNXSjkzVFdSaEc5a1F3c1YvcWN3TzRIbGZ0aUdjaENGRVNlcWVNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=845677865447
+**[https://biojourney.dsxdev.me/](https://biojourney.dsxdev.me/)**
 
+---
 
-###Front-End
-now to answer what does it do , here is the explanation
-So what we have built is a web-app, and in this project we have shown the user side of it(how the user will interact with this), I will discuss how the elyx team will get benifitted from it later on.
+## 🎯 Key Features
 
-##Chat-Section
-<img width="1917" height="906" alt="home-page2" src="https://github.com/user-attachments/assets/7ecd7eb5-6581-46f1-95a1-3406a00d573d" />
-so this is our chat section of our web-app which will also act as home page, in this section user can put up any of his/her query , then a AI response will come up which would have all the context of the
-conversation that has happened till now and also about the info in the documents(medical reports,food logs).The response would be given by the respective AI persona to which the question was related to
-(for ex- if the question is related to some medication then Dr warren answers the query).
-one of the biggest feature is everytime the AI response will definitely know about all the previous context to answer the query smartly(for ex- even if you ask it about a month-old conversation about a medication
-, it would be able to answer it).User can even see his/her previous conversations.
-Apart from this the elyx team can also put up messages(for ex-your monthly medical report by elyx is here)
+### 💬 Conversational AI Chat
 
-##Timeline-section
-#Timeline
-In this section <img width="1906" height="896" alt="timeline2" src="https://github.com/user-attachments/assets/5e4dd7f3-0dad-472e-952b-716d7dd29e4b" />
-we will show all the important events and decision that happened in member's medical journey with its reason(for ex-showing that some X medicine was added to the current plan because of some
-Y reason on some Z date).
+Our homepage features a powerful, context-aware chat interface. Users can ask any health-related query and receive intelligent responses from specialized AI personas. The AI maintains a complete history of the conversation and has access to all uploaded documents (like medical reports and food logs) to provide smart, relevant answers.
 
-##Wearables
-<img width="1906" height="916" alt="wearables" src="https://github.com/user-attachments/assets/946dd286-36a3-4012-b444-b6d895ac217e" />
-So in this section we want to shows all the data of the wearables that the member wear in graphical format.(for ex-showing the sleep data in graphical format of previous week)
+* **Contextual Memory:** The AI remembers past conversations, even from months ago, ensuring a seamless and intelligent user experience.
+* **Specialized AI Personas:** Questions are routed to the appropriate AI agent (e.g., a medication query is answered by "Dr. Warren").
+* **Team Communication:** The care team can also send important messages and updates directly through the chat.
 
-##Documents
-<img width="1913" height="916" alt="Documents" src="https://github.com/user-attachments/assets/2c832810-d904-4b3c-a5a5-5b2c77374b35" />
-So in this section we want to show all the documents that have been shared on this web-app either by user or AI or elyx team, and if user wants to upload any document he/she can do it here.
+<img width="1917" alt="Chat Section" src="https://github.com/user-attachments/assets/7ecd7eb5-6581-46f1-95a1-3406a00d573d" />
 
-##User-Progress
-<img width="1915" height="912" alt="user-progress" src="https://github.com/user-attachments/assets/1b5b914c-060f-49fa-b95c-fb65a4bf1315" />
-In this section we want to show the data about how many times or hours the user have been active on this app and how much he/she has talked to which AI agent.
-Apart from this we want to show some data about improvement and concerns in user's health in previous month(for ex-your cholestrol level dropped in prev month , your exercise went down) 
+---
 
-##Profile
-<img width="1913" height="926" alt="Profile" src="https://github.com/user-attachments/assets/ad46e175-16bc-466f-a348-704a365cf237" />
-In this section we want to show the personal details of the user.
+### 📅 Health Journey Timeline
 
+The Timeline section provides a clear, chronological view of all significant events and decisions in the member's health journey. This helps users understand the "why" behind every change in their health plan.
+
+<img width="1906" alt="Timeline Section" src="https://github.com/user-attachments/assets/5e4dd7f3-0dad-472e-952b-716d7dd29e4b" />
+
+---
+
+### ⌚ Wearables Integration
+
+Connect your health wearables and visualize your data in one place. This section presents data from devices in an intuitive graphical format, allowing users to easily track metrics like sleep patterns, activity levels, and more over time.
+
+<img width="1906" alt="Wearables Data" src="https://github.com/user-attachments/assets/946dd286-36a3-4012-b444-b6d895ac217e" />
+
+---
+
+### 📄 Document Hub
+
+A centralized repository for all health-related documents. Users, the AI, and the care team can upload and access reports, logs, and other important files. This ensures that all critical information is organized and easily accessible.
+
+<img width="1913" alt="Document Hub" src="https://github.com/user-attachments/assets/2c832810-d904-4b3c-a5a5-5b2c77374b35" />
+
+---
+
+### 📈 User Progress & Insights
+
+This section provides valuable insights into the user's engagement and health trends. It visualizes app activity, tracks interactions with AI agents, and highlights key health improvements and concerns from the previous month (e.g., "Your cholesterol level dropped," "Your exercise frequency decreased").
+
+<img width="1915" alt="User Progress" src="https://github.com/user-attachments/assets/1b5b914c-060f-49fa-b95c-fb65a4bf1315" />
+
+---
+
+### 👤 Member Profile
+
+A dedicated space for users to view and manage their personal details and account information.
+
+<img width="1913" alt="Profile Page" src="https://github.com/user-attachments/assets/ad46e175-16bc-466f-a348-704a365cf237" />
+
+---
+
+## ⚙️ Backend Architecture
+
+Our powerful backend is the engine that drives BioJourney.ai. It handles data processing, AI model integration, and secure information management. To understand the technical architecture and data flow, please view our detailed diagram on Miro.
+
+**[View Backend Architecture on Miro](https://miro.com/welcomeonboard/QTNZL2F6L2dBTXZrVnVLZ1BZL1JxN1dNenBPOEdPa2YrUWhieElTVG1MbXNvNEVBaExZelpSQWcxSm5RN2JvOFA3eEpGQjF5SUZvY2k0SFB0eDRDTVdQNmpVcWNXSjkzVFdSaEc5a1F3c1YvcWN3TzRIbGZ0aUdjaENGRVNlcWVNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=845677865447)**
+*(You can use any email to access the board)*
