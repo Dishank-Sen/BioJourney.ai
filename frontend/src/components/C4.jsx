@@ -11,7 +11,7 @@ export default function C4() {
   // Fetch documents from backend (Cloudinary list)
   const fetchDocuments = async () => {
     try {
-      const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/files`);
+      const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/files`);
       const data = await res.json();
       setDocuments(data);
     } catch (err) {
@@ -33,7 +33,7 @@ export default function C4() {
       formData.append("file", file);
 
       try {
-        const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/upload`, {
+        const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/upload`, {
           method: "POST",
           body: formData,
         });
@@ -52,7 +52,7 @@ export default function C4() {
   // Delete a file
   const handleDelete = async (publicId) => {
     try {
-      await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/delete/${publicId}`, {
+      await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/delete/${publicId}`, {
         method: "DELETE",
       });
       setDocuments((prev) =>

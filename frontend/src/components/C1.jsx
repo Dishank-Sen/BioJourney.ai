@@ -16,7 +16,7 @@ export default function C1() {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversation`, {
+        const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversation`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId }),
@@ -71,7 +71,7 @@ export default function C1() {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/getContent`, {
+      const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getContent`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

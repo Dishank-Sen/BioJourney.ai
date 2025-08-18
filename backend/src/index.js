@@ -91,4 +91,4 @@ app.post("/api/getConversation", async (req, res) => {
   return res.status(200).json({"conversation": userConversation})
 })
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(3000, '0.0.0.0',() => console.log("Server running on port 3000"));
