@@ -1,5 +1,5 @@
 We have hosted a demo of our website here you can go and see it 
-https://dsxdev.me/
+http://dsxdev.me/
 
 
 
