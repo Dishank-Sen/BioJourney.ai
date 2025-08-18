@@ -39,6 +39,7 @@ const HealthChangeSchema = new mongoose.Schema({
 
 const DrWarrenSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  count: {type: Number, default: 0},
   extracted: {
     medication: [MedicationSchema],
     test_results: [TestResultSchema],

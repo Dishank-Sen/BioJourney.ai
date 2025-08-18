@@ -27,6 +27,7 @@ export async function saveDrWarrenData(userId, drWarrenData) {
       console.log("creating new entry...")
       const entry = new DrWarren({
         userId,
+        count: 1,
         extracted: drWarrenData.extracted,
         changes_detected: drWarrenData.changes_detected || { new: {}, updated: {} }
       });
@@ -39,6 +40,8 @@ export async function saveDrWarrenData(userId, drWarrenData) {
       return savedEntry;
     }
 
+    existingUser.count = existingUser.count + 1;
+    
     // Append to arrays inside extracted
     for (let category of ["medication", "test_results", "diseases", "health_change"]) {
       if (drWarrenData.extracted?.[category]?.length > 0) {

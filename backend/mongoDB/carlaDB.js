@@ -27,6 +27,7 @@ export async function saveCarlaData(userId, carlaData) {
       console.log("Creating new entry for Carla...");
       const entry = new CarlaNutrition({
         userId,
+        count: 1,
         extracted: carlaData.extracted,
         changes_detected: carlaData.changes_detected || { new: {}, updated: {} }
       });
@@ -37,6 +38,7 @@ export async function saveCarlaData(userId, carlaData) {
     }
 
     // --- User Exists: Append Data ---
+    existingUser.count = existingUser.count + 1;
 
     // 1. Append to arrays inside 'extracted'
     for (const category of ["dietary_preference", "allergies", "breakfast", "lunch", "dinner"]) {

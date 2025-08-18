@@ -15,6 +15,7 @@ import { saveRachelData } from "../mongoDB/rachelDB.js";
 import { saveRubyData } from "../mongoDB/rubyDB.js";
 import { saveDrWarrenData } from "../mongoDB/dr_warrenDB.js";
 import { saveConversation } from "../mongoDB/conversationDB.js";
+import formatBioProfile from "../utils/formatBioProfile.js";
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ export default async function generateContent(msg,userId){
             null,
             2
         );
+        const formatBioData = await formatBioProfile(userId, persona.selected_expert)
     
         console.log("model selected:", persona.selected_expert)
         
@@ -55,7 +57,7 @@ export default async function generateContent(msg,userId){
             BASE_DATA: baseData,
             CHAT_HISTORY: formatConversation,
             USER_MESSAGE: msg,
-            BIO_PROFILE: ""
+            BIO_PROFILE: formatBioData
         });
         console.log("selector prompt:",selectorPrompt)
     
@@ -67,22 +69,22 @@ export default async function generateContent(msg,userId){
         await storeData({user:msg, assistant:parsed.summary},"tier1")
         if(persona.selected_expert === 'advik'){
             await saveAdvikData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }else if(persona.selected_expert == 'carla'){
             await saveCarlaData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }else if(persona.selected_expert == 'dr_warren'){
             await saveDrWarrenData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }else if(persona.selected_expert == 'neel'){
             await saveNeelData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }else if(persona.selected_expert == 'rachel'){
             await saveRachelData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }else if(persona.selected_expert == 'ruby'){
             await saveRubyData(userId,parsed)
-            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply, persona: persona.selected_expert})
+            await saveConversation(userId, {userReply: msg, assistantReply: parsed.reply}, persona.selected_expert)
         }
         return parsed;
     } catch (err) {

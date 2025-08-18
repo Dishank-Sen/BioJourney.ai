@@ -1,12 +1,51 @@
 import React, { useState, useEffect } from "react";
 import Timeline from "./Timeline.jsx";
 import { ExerciseIcon, AllergyIcon, DietIcon, DiseaseIcon, HealthIcon, InjuryIcon, MedicationIcon, MobilityIcon, ProgressIcon, TestIcon,DefaultIcon } from "./EventIcons.jsx";
+import MetricData from "./Metric.jsx";
+
+let metricData = {
+  totalConversation: 5,
+  participants: [
+    { name: "Ruby", value: 20 },
+    { name: "Dr. Warren", value: 30 },
+    { name: "Advik", value: 25 },
+    { name: "Carla", value: 25 },
+  ],
+  weeklyProgress: 8,
+  monthlyProgress: 15,
+  concerns: [
+    { message: "Missed 3 of 5 planned workouts", type: "error", status: "worsening" },
+    { message: "Blood glucose 5% higher than last month", type: "warning", status: "worsening" },
+  ],
+  sleepConcerns: [
+    { message: "Vantage sleep was 5h 40m (goal: 7h)", status: "worsening" },
+    { message: "Average sleep was 5m this month", status: "worsening" },
+  ],
+};
+
+
 
 // Helper functions (no changes)
 const generateTitle = (item) => {
     if (!item) return "Invalid Event";
     return `${(item.parent || 'Event').charAt(0).toUpperCase() + (item.parent || 'Event').slice(1)} ${item.tag || ''}`;
 };
+const generateSubtitle = (item) => {
+  if(item.persona === 'carla'){
+    if(item.parent === 'allergies') return item.allergy_name
+    if(item.parent === 'dietary_preference') return item.type
+  }else if(item.persona === 'dr_warren'){
+    if(item.parent === 'medication') return item.medication_name
+    if(item.parent === 'test_results') return item.test_name
+    if(item.parent === 'disease') return item.condition_name
+    if(item.parent === 'health_change') return item.metric
+  }else if(item.persona === 'rachel'){
+    if(item.parent === 'exercise') return item.exercise_name
+    if(item.parent === 'mobility_rehab') return item.movement
+    if(item.parent === 'injury') return item.injury_name
+    if(item.parent === 'progress') return item.metric
+  }
+}
 const getIconForEvent = (parent) => {
     const iconMap = { dietary_preference: DietIcon, medication: MedicationIcon, exercise: ExerciseIcon, allergies: AllergyIcon, progress: ProgressIcon, diseases: DiseaseIcon, health_change: HealthIcon, injury: InjuryIcon, mobility_rehab: MobilityIcon, test_results: TestIcon};
     return iconMap[parent] || DefaultIcon;
@@ -48,7 +87,7 @@ export default function C2() {
         // --- THIS IS THE FIXED LINE ---
         // It now correctly checks for a 'message' property in your API response.
         const raw = Array.isArray(data) ? data : Array.isArray(data.message) ? data.message : Array.isArray(data.timeline) ? data.timeline : [];
-
+        console.log("raw:",raw)
         if (raw.length === 0) {
             setEvents([]);
             setLoading(false);
@@ -63,12 +102,37 @@ export default function C2() {
             return {
               id: item._id,
               title: generateTitle(item),
+              parent: item.parent,
+              subTitle: generateSubtitle(item),
               icon: getIconForEvent(item.parent),
               suggestedBy: item.persona ? item.persona.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'Unknown',
               reason: item.reason || "No reason provided.",
               raw: item,
               time: new Date(item.timestamp).toLocaleString(),
-              date: new Date(item.timestamp).toLocaleDateString()
+              date: new Date(item.timestamp).toLocaleDateString(),
+              medication_name: item.medication_name || null,
+              dosage: item.dosage || null,
+              frequency: item.frequency || null,
+              test_name: item.test_name || null,
+              value: item.value || null,
+              unit: item.unit || null,
+              reference_range: item.reference_range || null,
+              condition_name: item.condition_name || null,
+              classification: item.classification || null,
+              metric: item.metric || null,
+              direction: item.direction || null,
+              duration: item.duration || null,
+              allergy_name: item.allergy_name || null,
+              caused_by: item.caused_by || null,
+              type: item.type || null,
+              exercise_name: item.exercise_name || null,
+              intensity: item.intensity || null,
+              movement: item.movement || null,
+              limitation: item.limitation || null,
+              pain_level: item.pain_level || null,
+              injury_name: item.injury_name || null,
+              severity: item.severity || null,
+              location: item.location || null
             };
           })
           .filter(Boolean);
@@ -86,10 +150,30 @@ export default function C2() {
       }
     };
 
+    const getConversationCount = async (userId) => {
+      const res = await fetch("http://localhost:3000/api/getConversationCount", {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json"
+        },
+        body: JSON.stringify({userId})
+      })
+
+      if(res.ok){
+        const data = await res.json();
+        metricData.participants = data.count;
+        metricData.totalConversation = data.totalCount;
+      }else{
+        console.log("some error occured")
+      }
+    }
+
+    getConversationCount(userId);
     fetchTimelineData();
   }, [userId]);
-
+  
   const activeEvent = events.find((e) => e.id === activeId);
+  // console.log("active event:", activeEvent)
 
   // --- UI Code (No Changes) ---
   return (
@@ -108,25 +192,147 @@ export default function C2() {
                 <div>
                   {activeEvent ? (
                     <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8 max-w-3xl mx-auto">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">{activeEvent.title}</h2>
-                    <div className="mb-6"><p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Suggested By</p>
-                    <p className="text-lg text-gray-800">{activeEvent.suggestedBy}</p>
+                      {/* Subtitle or main title */}
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{activeEvent.subTitle}</h2>
+
+                      {/* Suggested By */}
+                      <div className="mb-6">
+                        <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Suggested By</p>
+                        <p className="text-lg text-gray-800">{activeEvent.suggestedBy || activeEvent.persona}</p>
+                      </div>
+
+                      {/* Conditionally render sections based on parent */}
+                      {/* Medication */}
+                      {activeEvent.parent === "medication" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Medication</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.medication_name} – {activeEvent.dosage} ({activeEvent.frequency})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Test Results */}
+                      {activeEvent.parent === "test_results" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Test Result</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.test_name}: {activeEvent.value} {activeEvent.unit} (Range: {activeEvent.reference_range})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Diseases */}
+                      {activeEvent.parent === "diseases" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Condition</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.condition_name} ({activeEvent.classification})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Allergies */}
+                      {activeEvent.parent === "allergies" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Allergy</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.allergy_name} (Caused by: {activeEvent.caused_by})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-lg text-gray-800">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Dietary Preferences */}
+                      {activeEvent.parent === "dietary_preference" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Dietary Preference</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">{activeEvent.type}</p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Exercise */}
+                      {activeEvent.parent === "exercise" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Exercise</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.exercise_name} – {activeEvent.duration}, {activeEvent.frequency} ({activeEvent.intensity})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Mobility / Rehab */}
+                      {activeEvent.parent === "mobility_rehab" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Mobility / Rehab</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            Movement: {activeEvent.movement}, Limitation: {activeEvent.limitation}, Pain: {activeEvent.pain_level}, Duration: {activeEvent.duration}
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Injury */}
+                      {activeEvent.parent === "injury" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Injury</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.injury_name} ({activeEvent.severity}) – Location: {activeEvent.location}
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+                      {/* Progress */}
+                      {activeEvent.parent === "progress" && (
+                        <div className="mb-6">
+                          {/* <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Progress</p> */}
+                          <p className="text-md text-gray-600 leading-relaxed">
+                            {activeEvent.metric}: {activeEvent.value} ({activeEvent.direction})
+                          </p>
+                          <p className="text-lg text-gray-800">Reason</p>
+                          <p className="text-sm text-gray-500">{activeEvent.reason}</p>
+                          {/* <p className="text-sm text-gray-500">Importance: {activeEvent.importance}</p> */}
+                        </div>
+                      )}
+
+
+                      {/* Graph Section */}
+                      <div className="mt-8">
+                        <PlaceholderGraph />
+                      </div>
                     </div>
-                    <div className="mb-6">
-                      <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">Reason</p>
-                      <p className="text-md text-gray-600 leading-relaxed">{activeEvent.reason}</p>
-                    </div>
-                    <div className="mt-8">
-                      <PlaceholderGraph />
-                    </div>
-                  </div>
-                  ) : ( <p className="text-center text-gray-500">Please select an event from the timeline.</p> )}
+                  ) : (
+                    <p className="text-center text-gray-500">Please select an event from the timeline.</p>
+                  )}
                 </div>
+
               </>
             )}
           </div>
         )}
-        {activeTab === "Metrics" && <div className="p-8 text-center text-gray-500">Metrics data and visualizations would be displayed here.</div>}
+        {activeTab === "Metrics" && <MetricData data={metricData}/>}
       </div>
     </div>
   );

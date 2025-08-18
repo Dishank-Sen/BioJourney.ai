@@ -32,7 +32,7 @@ const ProgramAlignmentSchema = new mongoose.Schema({
 
 const NeelSchema = new mongoose.Schema({
   userId: { type: String, ref: "User", required: true },
-
+  count: {type: Number, default: 0},
   extracted: {
     strategic_goals: [StrategicGoalSchema],
     risks: [RiskSchema],

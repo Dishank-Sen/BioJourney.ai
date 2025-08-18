@@ -10,15 +10,15 @@ export async function saveRubyData(userId, rubyData) {
     if (!userId) throw new Error("userId is required");
     if (!rubyData) throw new Error("rubyData is required");
 
-    const hasData =
-      ["appointments", "reminders", "follow_ups", "tasks"].some(
-        (category) => rubyData.extracted?.[category]?.length > 0
-      );
+    // const hasData =
+    //   ["appointments", "reminders", "follow_ups", "tasks"].some(
+    //     (category) => rubyData.extracted?.[category]?.length > 0
+    //   );
 
-    if (!hasData) {
-      console.log("⚠️ No relevant Ruby data found. Skipping save.");
-      return null;
-    }
+    // if (!hasData) {
+    //   console.log("⚠️ No relevant Ruby data found. Skipping save.");
+    //   return null;
+    // }
 
     let existingUser = await RubyConcierge.findOne({ userId });
     if(!existingUser){
@@ -26,6 +26,7 @@ export async function saveRubyData(userId, rubyData) {
       console.log("creating new entry...")
       const entry = new RubyConcierge({
         userId,
+        count: 1,
         extracted: rubyData.extracted,
         changes_detected: rubyData.changes_detected || { new: {}, updated: {} }
       });
@@ -38,6 +39,8 @@ export async function saveRubyData(userId, rubyData) {
       return savedEntry;
     }
 
+    existingUser.count = existingUser.count + 1;
+    
     // Append to arrays inside extracted
     for (let category of ["appointments", "reminders", "follow_ups", "tasks"]) {
       if (rubyData.extracted?.[category]?.length > 0) {

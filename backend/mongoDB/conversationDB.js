@@ -6,7 +6,8 @@ export async function saveConversation(userId, conversationData, personaName) {
     if (mongoose.connection.readyState !== 1) {
       throw new Error("MongoDB not connected yet");
     }
-
+    // console.log("pesona for converation:",personaName)
+    // console.log("conversation data:",conversationData)
     if (!userId) throw new Error("userId is required");
     if (!conversationData) throw new Error("conversationData is required");
     if (!personaName) throw new Error("persona is required");

@@ -38,6 +38,7 @@ const TaskSchema = new mongoose.Schema({
 
 const RubySchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  count: {type: Number, default: 0},
   extracted: {
     appointments: [AppointmentSchema],
     reminders: [ReminderSchema],

@@ -11,6 +11,9 @@ import test from "../mongoDB/test.js";
 import generateRandomId from "../utils/generateId.js";
 import { seedDatabase } from "../mongoDB/seed.js";
 import getTimelineData from "../dataRetrieveMongoDB/timelineData.js";
+import formatBioProfile from "../utils/formatBioProfile.js";
+import getConversationCount from "../dataRetrieveMongoDB/conversationCount.js" 
+import getFullConversation from "../dataRetrieveMongoDB/getFullConversation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,11 +39,10 @@ cron.schedule("0 0 * * *", async () => {
 
 
 app.post("/api/getContent", async (req, res) => {
-  const { msg } = req.body;
-  const userId = generateRandomId();
+  const { msg, userId } = req.body;
   const geminiRes = await generateContent(msg, userId);
   if(geminiRes){
-    return res.status(200).json({"response": geminiRes.reply})
+    return res.status(200).json({"response": geminiRes.reply, "persona": geminiRes.persona})
   }else{
     return res.status(500).json({"response": "Internal server error"})
   }
@@ -67,5 +69,23 @@ app.post("/api/timeline", async (req,res) => {
   }
 })
 
+app.get("/formatData", async (req,res) => {
+  const formatData = await formatBioProfile("68a1ca9892c8c177a63ee0d0", "carla")
+  console.log("formatted data:", formatData)
+})
+
+app.post("/api/getConversationCount", async (req,res) => {
+  const {userId} = req.body;
+  const convoCount = await getConversationCount(userId);
+  // console.log(convoCount)
+  return res.status(200).json({count: convoCount.count, totalCount: convoCount.totalCount})
+})
+
+app.post("/api/getConversation", async (req, res) => {
+  const {userId} = req.body;
+  const userConversation = await getFullConversation(userId)
+  // console.log(userConversation)
+  return res.status(200).json({"conversation": userConversation})
+})
 
 app.listen(3000, () => console.log("Server running on port 3000"));

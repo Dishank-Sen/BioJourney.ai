@@ -24,7 +24,7 @@ const DietaryPreferenceSchema = new mongoose.Schema({
 
 const CarlaSchema = new mongoose.Schema({
   userId: { type: String, ref: "User", required: true },
-
+  count: {type: Number, default: 0},
   extracted: {
     dietary_preference: [DietaryPreferenceSchema],
     allergies: [AllergySchema],

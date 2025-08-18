@@ -11,7 +11,7 @@ const MetricSchema = new mongoose.Schema({
 
 const AdvikSchema = new mongoose.Schema({
   userId: { type: String, ref: "User", required: true },
-
+  count: {type: Number, default: 0},
   extracted: {
     sleep: [MetricSchema],
     recovery: [MetricSchema],

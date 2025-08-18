@@ -27,6 +27,7 @@ export async function saveNeelData(userId, neelData) {
       console.log("creating new entry...")
       const entry = new NeelConcierge({
         userId,
+        count: 1,
         extracted: neelData.extracted,
         changes_detected: neelData.changes_detected || { new: {}, updated: {} }
       });
@@ -39,6 +40,8 @@ export async function saveNeelData(userId, neelData) {
       return savedEntry;
     }
 
+    existingUser.count = existingUser.count + 1;
+    
     // Append to arrays inside extracted
     for (let category of ["strategic_goals", "risks", "client_feedback", "program_alignment"]) {
       if (neelData.extracted?.[category]?.length > 0) {

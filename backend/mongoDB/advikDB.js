@@ -27,6 +27,7 @@ export async function saveAdvikData(userId, advikData) {
       console.log("creating new entry...")
       const entry = new AdvikPerformance({
         userId,
+        count: 1,
         extracted: advikData.extracted,
         changes_detected: advikData.changes_detected || { new: {}, updated: {} }
       });
@@ -39,6 +40,7 @@ export async function saveAdvikData(userId, advikData) {
       return savedEntry;
     }
 
+    existingUser.count = existingUser.count + 1;
     // Append to arrays inside extracted
     for (let category of ["sleep", "recovery", "hrv", "stress"]) {
       if (advikData.extracted?.[category]?.length > 0) {

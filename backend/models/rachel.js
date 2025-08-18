@@ -40,6 +40,7 @@ const ProgressSchema = new mongoose.Schema({
 
 const RachelSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  count: {type: Number, default: 0},
   extracted: {
     exercise: [ExerciseSchema],
     mobility_rehab: [MobilityRehabSchema],

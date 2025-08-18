@@ -27,6 +27,7 @@ export async function saveRachelData(userId, rachelData) {
       console.log("creating new entry...")
       const entry = new RachelPhysio({
         userId,
+        count: 1,
         extracted: rachelData.extracted,
         changes_detected: rachelData.changes_detected || { new: {}, updated: {} }
       });
@@ -39,6 +40,8 @@ export async function saveRachelData(userId, rachelData) {
       return savedEntry;
     }
 
+    existingUser.count = existingUser.count + 1;
+    
     // Append to arrays inside extracted
     for (let category of ["exercises", "mobility_rehab", "injury", "progress"]) {
       if (rachelData.extracted?.[category]?.length > 0) {

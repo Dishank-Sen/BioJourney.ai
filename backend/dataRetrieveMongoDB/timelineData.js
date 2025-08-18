@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import CarlaNutrition from "../models/carla.js";
 import DrWarren from "../models/dr_warren.js";
 import RachelPhysio from "../models/rachel.js";
@@ -22,7 +21,9 @@ export default async function getTimelineData(userId) {
       ["new", "updated"].forEach(tag => {
         Object.keys(carlaUser.changes_detected[tag]).forEach(parent => {
           carlaUser.changes_detected[tag][parent].forEach(entry => {
-            timeline.push(normalize(entry, tag, parent, "carla"));
+            if (entry.importance === 'high' || entry.importance === 'medium') {
+              timeline.push(normalize(entry, tag, parent, "carla"));
+            }
           });
         });
       });
@@ -35,7 +36,9 @@ export default async function getTimelineData(userId) {
       ["new", "updated"].forEach(tag => {
         Object.keys(drWarrenUser.changes_detected[tag]).forEach(parent => {
           drWarrenUser.changes_detected[tag][parent].forEach(entry => {
-            timeline.push(normalize(entry, tag, parent, "dr_warren"));
+            if(entry.importance === 'high' || entry.importance === 'medium'){
+              timeline.push(normalize(entry, tag, parent, "dr_warren"));
+            }
           });
         });
       });
@@ -48,7 +51,9 @@ export default async function getTimelineData(userId) {
       ["new", "updated"].forEach(tag => {
         Object.keys(rachelUser.changes_detected[tag]).forEach(parent => {
           rachelUser.changes_detected[tag][parent].forEach(entry => {
-            timeline.push(normalize(entry, tag, parent, "rachel"));
+            if(entry.importance === 'high' || entry.importance === 'medium'){
+              timeline.push(normalize(entry, tag, parent, "rachel"));
+            }
           });
         });
       });
