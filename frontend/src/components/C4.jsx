@@ -43,8 +43,8 @@ export default function C4() {
         const data = await res.json();
         if (data.status === "success") {
           setDocuments((prevDocs) => [
-            ...prevDocs,
             { url: data.url, public_id: data.public_id },
+            ...prevDocs,
           ]);
         }
       }
