@@ -31,13 +31,14 @@ export default function C6() {
       const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
         method: "POST",
         headers: {
-          "Content-Type": "Application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({userId})
       })
 
       if(res.ok){
         const data = await res.json();
+        console.log(data)
         metricData.participants = data.count;
         metricData.totalConversation = data.totalCount;
       }else{
