@@ -10,11 +10,14 @@ export default function C4() {
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [userId, setUserId] = useState("68a1ca9892c8c177a63ee0d0");
 
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/files`);
+      const res = await fetch(
+        `http://${import.meta.env.VITE_EC2_ENDPOINT}/api/files/${userId}`
+      );
       const data = await res.json();
       setDocuments(data);
     } catch (err) {
@@ -23,6 +26,7 @@ export default function C4() {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchDocuments();
@@ -36,7 +40,8 @@ export default function C4() {
       for (let file of files) {
         const formData = new FormData();
         formData.append("file", file);
-        const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/upload`, {
+        formData.append("userId", userId)
+        const res = await fetch(`http://${import.meta.env.VITE_EC2_ENDPOINT}/api/upload`, {
           method: "POST",
           body: formData,
         });
@@ -154,7 +159,7 @@ export default function C4() {
             >
               <DocumentTextIcon className="w-6 h-6 text-blue-500" />
               <span className="text-gray-700 truncate max-w-xs">
-                {doc.url.split("/").pop()}
+                {doc.originalName}
               </span>
               <a
                 href={doc.url}

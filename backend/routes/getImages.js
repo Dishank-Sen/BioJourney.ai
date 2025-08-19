@@ -1,32 +1,29 @@
+// src/files.js
 import express from "express";
-import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
+import UserFile from "../models/file.js";
 
-dotenv.config();
 const router = express.Router();
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// GET /files → list uploaded files
-router.get("/", async (req, res) => {
+// GET /files → list uploaded files for a user
+router.get("/:userId", async (req, res) => {
   try {
-    const result = await cloudinary.search
-      .expression("folder:biojourney_docs")
-      .sort_by("created_at", "desc")
-      .max_results(30)
-      .execute();
+    const { userId } = req.params;
 
-    res.json(result.resources.map(file => ({
-      url: file.secure_url,
-      public_id: file.public_id,
-    })));
+    const user = await UserFile.findOne({ userId });
+    if (!user || !user.files.length) {
+      return res.json([]);
+    }
+
+    res.json(
+      user.files.map((file) => ({
+        url: file.url,
+        public_id: file.publicId,
+        originalName: file.originalName,
+      }))
+    );
   } catch (err) {
     console.error("Get files error:", err);
-    res.status(500).json({ error: "Failed to fetch images" });
+    res.status(500).json({ error: "Failed to fetch documents" });
   }
 });
 

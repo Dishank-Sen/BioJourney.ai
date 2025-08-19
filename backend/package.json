@@ -24,6 +24,7 @@
     "node-cron": "^4.2.1",
     "node-fetch": "^3.3.2",
     "papaparse": "^5.5.3",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "zod": "^3.25.76"
   }
 }

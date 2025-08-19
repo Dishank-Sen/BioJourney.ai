@@ -6,10 +6,24 @@ import dotenv from "dotenv";
 import path from "path";
 import { extractFromCSV } from "../utils/extractor.js";
 import { generateInsights } from "../utils/insightGenerator.js";
+import UserFile from "../models/file.js";
+import saveReport from "../mongoDB/fileDataDB.js";
+import fs from "fs"
 
 dotenv.config();
 const router = express.Router();
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = "./uploads"; // create uploads folder if not exists
+    if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
 const upload = multer({ storage });
 
 cloudinary.config({
@@ -24,7 +38,8 @@ router.post("/", upload.single("file"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-
+    const userId = req.body.userId;
+    const filePath = req.file.path;
     console.log(`[LOG] Received file: ${req.file.originalname}`);
 
     const ext = path.extname(req.file.originalname).toLowerCase();
@@ -63,17 +78,45 @@ router.post("/", upload.single("file"), async (req, res) => {
     }
 
     console.log("[LOG] Starting upload to Cloudinary...");
-    const stream = cloudinary.uploader.upload_stream(
+    cloudinary.uploader.upload(
+      filePath,
       { resource_type: "auto", folder: "biojourney_docs" },
-      (error, result) => {
+      async (error, result) => {
         if (error) {
           console.error("Cloudinary upload error:", error);
-          // ✅ 3. Send back a more detailed error message
           return res.status(500).json({ error: "Cloudinary upload failed", message: error.message });
         }
-        
+
         console.log(`[LOG] Successfully uploaded to Cloudinary. URL: ${result.secure_url}`);
-        
+
+        let user = await UserFile.findOne({ userId });
+        if (!user) {
+          const newUser = new UserFile({
+            userId, // ✅ must set userId
+            files: [
+              {
+                originalName: req.file.originalname,
+                publicId: result.public_id,
+                url: result.secure_url,
+              }
+            ]
+          });
+          await newUser.save();
+        } else {
+          user.files.push({
+            originalName: req.file.originalname,
+            publicId: result.public_id,
+            url: result.secure_url,
+          });
+          await user.save();
+        }
+
+
+        // generating insight and saving in DB
+        console.log(filePath);
+        await saveReport(filePath, userId);
+        console.log("insight generated");
+
         res.json({
           status: "success",
           url: result.secure_url,
@@ -83,7 +126,7 @@ router.post("/", upload.single("file"), async (req, res) => {
         });
       }
     );
-    stream.end(req.file.buffer);
+
     
   } catch (err)
   {
