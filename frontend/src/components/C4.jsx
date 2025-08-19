@@ -16,7 +16,7 @@ export default function C4() {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://${import.meta.env.VITE_EC2_ENDPOINT}/api/files/${userId}`
+        `https://${import.meta.env.VITE_EC2_ENDPOINT}/api/files/${userId}`
       );
       const data = await res.json();
       setDocuments(data);
