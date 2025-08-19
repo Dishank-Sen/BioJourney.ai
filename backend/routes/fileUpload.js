@@ -18,18 +18,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// POST /upload (CSV or PDF)
+// POST /upload (CSV, PDF, or Images)
 router.post("/", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // ✅ Added more descriptive logs
     console.log(`[LOG] Received file: ${req.file.originalname}`);
 
     const ext = path.extname(req.file.originalname).toLowerCase();
-    const allowedExtensions = [".csv", ".pdf"];
+    // ✅ 1. Add image extensions to the allowed list
+    const allowedExtensions = [".csv", ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".webp"];
     
     console.log(`[LOG] Detected file extension: ${ext}`);
 
@@ -37,7 +37,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       console.error(`[ERROR] Invalid file type: ${ext}`);
       return res
         .status(400)
-        .json({ error: "Only CSV and PDF files are supported" });
+        .json({ error: "Only CSV, PDF, and image files are supported" });
     }
 
     let extracted = null;
@@ -55,10 +55,11 @@ router.post("/", upload.single("file"), async (req, res) => {
         console.log("[LOG] CSV processing complete.");
       } catch (exErr) {
         console.error("CSV extraction error:", exErr);
-        return res.status(500).json({ error: "Failed to process CSV file" });
+        return res.status(500).json({ error: "Failed to process CSV file", message: exErr.message });
       }
-    } else if (ext === ".pdf") {
-      console.log("[LOG] File is a PDF. Skipping extraction.");
+    } else {
+        // ✅ 2. Generic log for any non-CSV file (PDF, images)
+        console.log(`[LOG] File is a non-CSV (${ext}). Skipping extraction.`);
     }
 
     console.log("[LOG] Starting upload to Cloudinary...");
@@ -67,18 +68,18 @@ router.post("/", upload.single("file"), async (req, res) => {
       (error, result) => {
         if (error) {
           console.error("Cloudinary upload error:", error);
-          return res.status(500).json({ error: "Cloudinary upload failed" });
+          // ✅ 3. Send back a more detailed error message
+          return res.status(500).json({ error: "Cloudinary upload failed", message: error.message });
         }
         
-        // ✅ This log confirms the upload is finished for both file types
         console.log(`[LOG] Successfully uploaded to Cloudinary. URL: ${result.secure_url}`);
         
         res.json({
           status: "success",
           url: result.secure_url,
           public_id: result.public_id,
-          extracted, // Will be null for PDFs
-          insights,  // Will be null for PDFs
+          extracted,
+          insights,
         });
       }
     );
@@ -87,7 +88,8 @@ router.post("/", upload.single("file"), async (req, res) => {
   } catch (err)
   {
     console.error("Upload error:", err);
-    res.status(500).json({ error: "Server error" });
+    // ✅ 3. Send back a more detailed error message
+    res.status(500).json({ error: "Server error", message: err.message });
   }
 });
 
