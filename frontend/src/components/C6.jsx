@@ -41,7 +41,6 @@ export default function C6() {
           console.log("API response:", data);
 
           setMetrics((prev) => ({
-            ...prev,
             participants: data.count,        // count is already an array of {name, value}
             totalConversation: data.totalCount
           }));
