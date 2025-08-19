@@ -14,6 +14,9 @@ import getTimelineData from "../dataRetrieveMongoDB/timelineData.js";
 import formatBioProfile from "../utils/formatBioProfile.js";
 import getConversationCount from "../dataRetrieveMongoDB/conversationCount.js" 
 import getFullConversation from "../dataRetrieveMongoDB/getFullConversation.js";
+import fileUploadRoutes from "../routes/fileUpload.js";
+import getImagesRoutes from "../routes/getImages.js";
+import deleteImagesRoutes from "../routes/deleteImages.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,5 +101,9 @@ app.post("/api/getConversation", async (req, res) => {
   // console.log(userConversation)
   return res.status(200).json({"conversation": userConversation})
 })
+
+app.use("/api/upload", fileUploadRoutes);   // ✅ only CSV now
+app.use("/api/files", getImagesRoutes);
+app.use("/api/delete", deleteImagesRoutes);
 
 app.listen(3000, '0.0.0.0',() => console.log("Server running on port 3000"));
