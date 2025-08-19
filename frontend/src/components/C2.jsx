@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Timeline from "./Timeline.jsx";
 import { ExerciseIcon, AllergyIcon, DietIcon, DiseaseIcon, HealthIcon, InjuryIcon, MedicationIcon, MobilityIcon, ProgressIcon, TestIcon,DefaultIcon } from "./EventIcons.jsx";
-import MetricData from "./Metric.jsx";
+import MetricData from "./Progress.jsx";
 
-let metricData = {
-  totalConversation: 5,
-  participants: [
-    { name: "Ruby", value: 20 },
-    { name: "Dr. Warren", value: 30 },
-    { name: "Advik", value: 25 },
-    { name: "Carla", value: 25 },
-  ],
-  weeklyProgress: 8,
-  monthlyProgress: 15,
-  concerns: [
-    { message: "Missed 3 of 5 planned workouts", type: "error", status: "worsening" },
-    { message: "Blood glucose 5% higher than last month", type: "warning", status: "worsening" },
-  ],
-  sleepConcerns: [
-    { message: "Vantage sleep was 5h 40m (goal: 7h)", status: "worsening" },
-    { message: "Average sleep was 5m this month", status: "worsening" },
-  ],
-};
+// let metricData = {
+//   totalConversation: 5,
+//   participants: [
+//     { name: "Ruby", value: 20 },
+//     { name: "Dr. Warren", value: 30 },
+//     { name: "Advik", value: 25 },
+//     { name: "Carla", value: 25 },
+//   ],
+//   weeklyProgress: 8,
+//   monthlyProgress: 15,
+//   concerns: [
+//     { message: "Missed 3 of 5 planned workouts", type: "error", status: "worsening" },
+//     { message: "Blood glucose 5% higher than last month", type: "warning", status: "worsening" },
+//   ],
+//   sleepConcerns: [
+//     { message: "Vantage sleep was 5h 40m (goal: 7h)", status: "worsening" },
+//     { message: "Average sleep was 5m this month", status: "worsening" },
+//   ],
+// };
 
 
 
@@ -150,25 +150,25 @@ export default function C2() {
       }
     };
 
-    const getConversationCount = async (userId) => {
-      const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "Application/json"
-        },
-        body: JSON.stringify({userId})
-      })
+    // const getConversationCount = async (userId) => {
+    //   const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "Application/json"
+    //     },
+    //     body: JSON.stringify({userId})
+    //   })
 
-      if(res.ok){
-        const data = await res.json();
-        metricData.participants = data.count;
-        metricData.totalConversation = data.totalCount;
-      }else{
-        console.log("some error occured")
-      }
-    }
+    //   if(res.ok){
+    //     const data = await res.json();
+    //     metricData.participants = data.count;
+    //     metricData.totalConversation = data.totalCount;
+    //   }else{
+    //     console.log("some error occured")
+    //   }
+    // }
 
-    getConversationCount(userId);
+    // getConversationCount(userId);
     fetchTimelineData();
   }, [userId]);
   
@@ -332,7 +332,7 @@ export default function C2() {
             )}
           </div>
         )}
-        {activeTab === "Metrics" && <MetricData data={metricData}/>}
+        {activeTab === "Metrics" && <p>User Metric Data</p>}
       </div>
     </div>
   );

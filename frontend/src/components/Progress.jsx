@@ -16,7 +16,7 @@ const COLORS = [
 ];
 
 
-export default function MetricData({ data }) {
+export default function Progress({ data }) {
   const {
     totalConversation,
     participants,
