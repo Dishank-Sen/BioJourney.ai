@@ -1,7 +1,7 @@
 // src/components/C6.jsx
 import React from "react";
-import { useEffect } from "react";
-import Progress from "./Progress";
+import { useEffect, useState } from "react";
+import Progress from "./Progress.jsx";
 
 let metricData = {
   totalConversation: 5,
