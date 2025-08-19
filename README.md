@@ -36,7 +36,7 @@ The Timeline section provides a clear, chronological view of all significant eve
 
 Connect your health wearables and visualize your data in one place. This section presents data from devices in an intuitive graphical format, allowing users to easily track metrics like sleep patterns, activity levels, and more over time.
 
-<img width="1906" alt="Wearables Data" src="https://github.com/user-attachments/assets/946dd286-36a3-4012-b444-b6d895ac217e" />
+<img width="1906" alt="Wearables Data" src="./frontend//src/assets/metricDashboard.png" />
 
 ---
 
@@ -70,3 +70,18 @@ Our powerful backend is the engine that drives BioJourney.ai. It handles data pr
 
 **[View Backend Architecture on Miro](https://miro.com/welcomeonboard/QTNZL2F6L2dBTXZrVnVLZ1BZL1JxN1dNenBPOEdPa2YrUWhieElTVG1MbXNvNEVBaExZelpSQWcxSm5RN2JvOFA3eEpGQjF5SUZvY2k0SFB0eDRDTVdQNmpVcWNXSjkzVFdSaEc5a1F3c1YvcWN3TzRIbGZ0aUdjaENGRVNlcWVNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=845677865447)**
 *(You can use any email to access the board)*
+
+## 🗺️ Roadmap & Future Features
+
+We are continuously working to enhance BioJourney.ai. Here are some of the exciting features we plan to implement next:
+
+### Proactive Health Alerts via Gmail & Twilio
+To ensure our members never miss a critical update, we are developing a feature to connect to their Gmail accounts securely.
+* **Smart Monitoring:** Using the Gmail API, our system will identify important health-related emails, such as new lab test results.
+* **Urgency Detection:** The content will be analyzed to determine if the results require immediate attention.
+* **Automated Calling:** If an urgent matter is detected, we will use the Twilio API to automatically place a call to the user, ensuring they are notified promptly.
+
+### Enhanced Wearable Data Analysis with CSV Upload
+While direct API integration with all wearables is a long-term goal, we are implementing a flexible solution to support a wider range of devices immediately.
+* **User-Uploaded Data:** Members will be able to upload a CSV file containing their watch activity and other wearable data.
+* **Meaningful Insights:** Our backend will parse this file and generate the same rich, meaningful insights and graphical visualizations currently planned for the wearables section.
