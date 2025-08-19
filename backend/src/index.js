@@ -30,7 +30,11 @@ await connectDB();
 // await testSave();
 // console.log(process.env.MONGODB_URI)
 
-app.use(cors());
+app.use(cors({
+  origin: "https://biojourney.dsxdev.me",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json());
 
 cron.schedule("0 0 * * *", async () => {
