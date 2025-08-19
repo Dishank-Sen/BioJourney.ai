@@ -1,9 +1,7 @@
-// src/components/C6.jsx
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Progress from "./Progress.jsx";
 
-let metricData = {
+const initialMetricData = {
   totalConversation: 5,
   participants: [
     { name: "Ruby", value: 20 },
@@ -24,36 +22,45 @@ let metricData = {
 };
 
 export default function C6() {
-  const [userId, setUserId] = useState("68a1ca9892c8c177a63ee0d0");
+  const [userId] = useState("68a1ca9892c8c177a63ee0d0");
+  const [metrics, setMetrics] = useState(initialMetricData);
 
   useEffect(() => {
     const getConversationCount = async (userId) => {
-      const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({userId})
-      })
+      try {
+        const res = await fetch(`https://${import.meta.env.VITE_EC2_ENDPOINT}/api/getConversationCount`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ userId })
+        });
 
-      if(res.ok){
-        const data = await res.json();
-        console.log(data)
-        metricData.participants = data.count;
-        metricData.totalConversation = data.totalCount;
-      }else{
-        console.log("some error occured")
+        if (res.ok) {
+          const data = await res.json();
+          console.log("API response:", data);
+
+          setMetrics((prev) => ({
+            ...prev,
+            participants: data.count,        // count is already an array of {name, value}
+            totalConversation: data.totalCount
+          }));
+        } else {
+          console.log("Some error occurred");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
       }
-    }
+    };
 
     getConversationCount(userId);
-  }, [])
+  }, [userId]);
 
   return (
     <div className="p-6 flex items-center justify-center h-full">
       <div className="text-center text-gray-500">
         <h2 className="text-xl font-semibold">User Progress</h2>
-        <Progress data={metricData}/>
+        <Progress data={metrics} />
       </div>
     </div>
   );
